@@ -32,7 +32,9 @@ app.secret_key = "ch@tb07"
 # Adiciona a funcionalidade de WebSockets (comunicação em tempo real) ao nosso app.
 # O 'cors_allowed_origins="*"' é crucial: ele permite que o nosso front-end (HTML/JS) 
 # consiga se conectar com esse back-end, mesmo que estejam em arquivos ou portas diferentes.
-socketio = SocketIO(app, cors_allowed_origins="*")
+# Forçamos o async_mode='threading' para evitar problemas de compatibilidade (Monkey Patching)
+# entre o eventlet/gevent e a biblioteca oficial do Google GenAI nos sockets SSL.
+socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
 # Dicionário que funciona como a "memória temporária" do servidor. 
 # Ele guarda a conversa de cada aluno separadamente usando um ID único.
