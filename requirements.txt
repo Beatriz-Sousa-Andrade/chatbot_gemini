@@ -1,9 +1,7 @@
 flask
-flask-cors
-flask-SocketIO
+flask-socketio
+python-engineio>=4.8.0
+eventlet
 google-genai
 python-dotenv
 gunicorn
-gevent
-gevent-websocket
-eventlet
