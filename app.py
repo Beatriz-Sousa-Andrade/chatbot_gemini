@@ -44,5 +44,10 @@ def handle_enviar_mensagem(data):
     except Exception as e:
         emit('erro', {"erro": str(e)})
 
+# Adicione esta rota para o servidor responder algo na página inicial
+@app.route('/')
+def home():
+    return "O servidor está online e pronto para conexões Socket.IO!", 200
+
 if __name__ == "__main__":
     socketio.run(app, port=6500)
