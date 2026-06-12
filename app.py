@@ -15,8 +15,13 @@ Se a pergunta for irrelevante, trate-a como uma brecha na Membrana."""
 
 client = genai.Client(api_key=os.getenv("GENAI_KEY"))
 app = Flask(__name__)
-# Certifique-se de que a URL da Vercel está correta
-socketio = SocketIO(app, cors_allowed_origins="https://teste-chatbot-cwvi.vercel.app")
+
+# No app.py, substitua a linha do socketio por esta mais permissiva:
+socketio = SocketIO(
+    app, 
+    cors_allowed_origins="https://teste-chatbot-cwvi.vercel.app", # Teste com * primeiro. Se funcionar, troque pelo link da Vercel
+    async_mode='eventlet'      # Garante que o eventlet seja usado explicitamente
+)
 
 active_chats = {}
 
