@@ -8,11 +8,14 @@ import os
 load_dotenv()
 
 MODELO = "gemini-3.1-flash-lite"
-instrucoes = "Você é um assistente virtual amigável. Responda de forma concisa e objetiva."
+instrucoes = """Você é um especialista em ocultismo da Ordem Paranormal. 
+Seu tom é misterioso, sério e técnico. Você lida com rituais, elementos (Sangue, Morte, Energia, Conhecimento), 
+criaturas e investigações. Responda como se estivesse analisando um Caso Paranormal. 
+Se a pergunta for irrelevante, trate-a como uma brecha na Membrana."""
 
 client = genai.Client(api_key=os.getenv("GENAI_KEY"))
 app = Flask(__name__)
-# O CORS agora aponta para o seu domínio da Vercel
+# Certifique-se de que a URL da Vercel está correta
 socketio = SocketIO(app, cors_allowed_origins="https://teste-chatbot-cwvi.vercel.app")
 
 active_chats = {}
@@ -32,17 +35,16 @@ def handle_enviar_mensagem(data):
     mensagem_usuario = data.get("mensagem")
     
     if not session_id or not mensagem_usuario:
-        emit('erro', {"erro": "Dados inválidos."})
         return
 
     try:
         user_chat = get_chat_session(session_id)
+        # O envio é rápido, mas o Render pode demorar a processar a primeira vez
         resposta = user_chat.send_message(mensagem_usuario)
         texto = resposta.text if hasattr(resposta, 'text') else resposta.candidates[0].content.parts[0].text
-        
         emit('nova_mensagem', {"remetente": "bot", "texto": texto})
     except Exception as e:
-        emit('erro', {"erro": str(e)})
+        emit('erro', {"erro": "A Membrana está instável, tente novamente."})
 
 # Adicione esta rota para o servidor responder algo na página inicial
 @app.route('/')
