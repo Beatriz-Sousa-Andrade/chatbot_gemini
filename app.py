@@ -25,11 +25,12 @@ app = Flask(__name__)
 # Configuração de SocketIO otimizada para Render
 # Usamos '*' para evitar bloqueios de CORS. 
 # ping_timeout é importante para conexões instáveis do plano gratuito.
+# Mude a linha do socketio para esta:
 socketio = SocketIO(
     app, 
-    cors_allowed_origins="*", 
+    cors_allowed_origins="*",  # O asterisco libera qualquer origem para teste
     async_mode='eventlet',
-    ping_timeout=60,
+    ping_timeout=120,
     ping_interval=25
 )
 
