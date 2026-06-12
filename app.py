@@ -41,7 +41,7 @@ app.secret_key = "ch@tb07"
 # Adiciona a funcionalidade de WebSockets (comunicação em tempo real) ao nosso app.
 # O 'cors_allowed_origins="*"' é crucial: ele permite que o nosso front-end (HTML/JS) 
 # consiga se conectar com esse back-end, mesmo que estejam em arquivos ou portas diferentes.
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="https://teste-chatbot-cwvi.vercel.app/")
 
 # Dicionário que funciona como a "memória temporária" do servidor. 
 # Ele guarda a conversa de cada aluno separadamente usando um ID único.
