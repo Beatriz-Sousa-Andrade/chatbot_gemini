@@ -1,4 +1,4 @@
-from flask import Flask, jsonify
+from flask import Flask
 from flask_socketio import SocketIO, emit
 from google import genai
 from google.genai import types
@@ -7,7 +7,8 @@ import os
 
 load_dotenv()
 
-MODELO = "gemini-3.1-flash-lite"
+# Usando o modelo flash padrão
+MODELO = "gemini-1.5-flash" 
 instrucoes = """Você é um especialista em ocultismo da Ordem Paranormal. 
 Seu tom é misterioso, sério e técnico. Você lida com rituais, elementos (Sangue, Morte, Energia, Conhecimento), 
 criaturas e investigações. Responda como se estivesse analisando um Caso Paranormal. 
@@ -16,11 +17,13 @@ Se a pergunta for irrelevante, trate-a como uma brecha na Membrana."""
 client = genai.Client(api_key=os.getenv("GENAI_KEY"))
 app = Flask(__name__)
 
-# No app.py, substitua a linha do socketio por esta mais permissiva:
+# CONFIGURAÇÃO CRÍTICA: '*' permite que qualquer domínio conecte, eliminando erros de CORS
 socketio = SocketIO(
     app, 
-    cors_allowed_origins="https://teste-chatbot-cwvi.vercel.app", # Teste com * primeiro. Se funcionar, troque pelo link da Vercel
-    async_mode='eventlet'      # Garante que o eventlet seja usado explicitamente
+    cors_allowed_origins="*", 
+    async_mode='eventlet',
+    ping_timeout=120, 
+    ping_interval=25
 )
 
 active_chats = {}
@@ -44,17 +47,15 @@ def handle_enviar_mensagem(data):
 
     try:
         user_chat = get_chat_session(session_id)
-        # O envio é rápido, mas o Render pode demorar a processar a primeira vez
         resposta = user_chat.send_message(mensagem_usuario)
         texto = resposta.text if hasattr(resposta, 'text') else resposta.candidates[0].content.parts[0].text
         emit('nova_mensagem', {"remetente": "bot", "texto": texto})
     except Exception as e:
         emit('erro', {"erro": "A Membrana está instável, tente novamente."})
 
-# Adicione esta rota para o servidor responder algo na página inicial
 @app.route('/')
 def home():
-    return "O servidor está online e pronto para conexões Socket.IO!", 200
+    return "Servidor Operante", 200
 
 if __name__ == "__main__":
     socketio.run(app, port=6500)
