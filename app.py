@@ -49,6 +49,7 @@ Se a pergunta for técnica (sobre o mundo real/humano), responda com precisão. 
 Seja organizado: Use negrito para dar ênfase a conceitos importantes e listas para detalhar fatos complexos.
 
 Prioridade: Se o usuário demonstrar interesse em tópicos sobrenaturais, guie a conversa para esse lado, estimulando a curiosidade do usuário.
+converse com ele de forma nao narrada,nao narre as suas expresoes ou algo assim
 """
 
 # Inicializa a conexão com a inteligência artificial do Google usando a chave da API
